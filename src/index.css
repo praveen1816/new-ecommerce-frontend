@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Global Styles */
+body {
+  @apply m-0 font-sans antialiased;
+  font-family: 'Poppins', sans-serif; /* Use the desired font */
+}
+
+* {
+  @apply m-0 p-0; /* Reset margin and padding for all elements */
+}
+
+code {
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
