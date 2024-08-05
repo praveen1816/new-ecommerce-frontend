@@ -2,7 +2,8 @@ import React, { createContext, useState, useEffect } from "react";
 
 // Create context
 export const ShopContext = createContext(null);
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL; // Ensure this is correctly set
+
 // Function to initialize cart
 const getDefaultCart = () => {
   let cart = {};
@@ -33,11 +34,12 @@ const ShopContextProvider = ({ children }) => {
     };
 
     fetchProducts();
+
     if (localStorage.getItem('auth-token')) {
       fetch(`${apiUrl}/getcart`, {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
+          'Accept': 'application/json',
           'auth-token': localStorage.getItem('auth-token'),
           'Content-Type': 'application/json',
         },
@@ -46,7 +48,6 @@ const ShopContextProvider = ({ children }) => {
         .then((response) => response.json())
         .then((data) => setCartItems(data))
         .catch((error) => console.error('Error fetching cart items:', error));
-    
     }
   }, []);
 
@@ -54,22 +55,20 @@ const ShopContextProvider = ({ children }) => {
   const addToCart = (itemId) => {
     setCartItems((prev) => {
       const updatedCart = { ...prev, [itemId]: prev[itemId] + 1 };
-      if(localStorage.getItem('auth-token')){
-        fetch(`${apiUrl}/addtocart`,{
-          method:'POST',
-          headers:{
-            Accept:'application/form-data',
-            'auth-token':`${localStorage.getItem('auth-token')}`,
-            'Conten-Type':'application/json'
+      if (localStorage.getItem('auth-token')) {
+        fetch(`${apiUrl}/addtocart`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'auth-token': localStorage.getItem('auth-token'),
+            'Content-Type': 'application/json',
           },
-          body:JSON.stringify({"itemID":itemId}),
+          body: JSON.stringify({ itemId }), // Fixed typo here
         })
-        .then((response)=>response.json())
-        .then((data)=>console.log(data));
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error('Error adding to cart:', error));
       }
-      
-      
-     
       return updatedCart;
     });
   };
@@ -83,7 +82,7 @@ const ShopContextProvider = ({ children }) => {
         fetch(`${apiUrl}/removefromcart`, {
           method: 'POST',
           headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'auth-token': localStorage.getItem('auth-token'),
             'Content-Type': 'application/json',
           },
